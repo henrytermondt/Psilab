@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<!-- 
+
+-->
+<html>
+<head>
+    <title>Psilab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+        }
+        :root {
+            --light: rgb(225, 225, 225);
+            --tab-height: 53px;
+            --slide-in-time: cubic-bezier(0.095, 0.675, 0, 1);
+            --slide-out-time: cubic-bezier(1, 0, 0.905, 0.325);
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+
+            overflow: hidden;
+
+            background-color: rgb(27, 27, 27);
+        }
+
+        #left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            max-width: 360px;
+            height: 100vh;
+
+            background-color: rgb(40, 40, 40);
+
+            border-right-style: solid;
+            border-right-color: rgb(40, 40, 40);
+            border-right-width: 4px;
+
+            /* display: flex;
+            flex-direction: column;
+            align-items: center; */
+            /* justify-content: center; */
+        }
+
+        #tab-control {
+            position: relative;
+            margin: calc(var(--tab-height) - 30px) 25%;
+
+            width: calc(50%);
+            
+        }
+        #tab-control button {
+            position: absolute;
+
+            font-family: "Noto Sans", sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--light);
+
+            border-style: none;
+            /* border-radius: 50px; */
+            /* border-width: 2px; */
+            /* border-color: rgb(60, 60, 60); */
+
+            background-color: transparent;
+
+            transform: translate(-50%, 0);
+            transition-property: filter, transform font-weight;
+            transition-duration: 0.05s;
+        }
+        #tab-control button:hover {
+            cursor: pointer;
+        }
+        #about-button {
+            left: 0%;
+        }
+        #tutorial-button {
+            left: 50%;
+        }
+        #edit-button {
+            left: 100%;
+        }
+        #tab-control button:hover {
+            filter: brightness(110%);
+            /* transform: translate(-50%, 0) scale(1.05); */
+        }
+
+
+        .hint {
+            position: absolute;
+            top: var(--tab-height);
+            height: 2px;
+
+            border-radius: 5px;
+
+            transition: background-color;
+            transition-duration: 0.2s;
+        }
+        #about-hint {
+            left: calc((100% - (50% + 55px)) / 2 - 6px);
+            width: 66px;
+        }
+        #tutorial-hint {
+            left: calc((100% - 77px) / 2);
+            width: 77px;
+        }
+        #edit-hint {
+            left: calc(100% - (50% + 55px) / 2 + 7px);
+            width: 41px;
+        }
+
+
+        #bottom-line {
+            position: absolute;
+            left: calc((100% - (50% + 55px)) / 2 - 6px);
+            top: var(--tab-height);
+
+            width: calc(50% + 55px);
+            height: 2px;
+
+            border-radius: 5px;
+
+            /* transform: translate(-20%, 0); */
+
+            background-color: rgb(60, 60, 60);
+        }
+        #highlight-line {
+            position: absolute;
+            top: var(--tab-height);
+            height: 2px;
+
+            border-radius: 5px;
+            background-color: var(--light);
+
+            transition-property: left, width;
+            transition-duration: 0.2s;
+        }
+        #highlight-line[data-selected='about'] {
+            left: calc((100% - (50% + 55px)) / 2 - 6px);
+            width: 66px;
+        }
+        #highlight-line[data-selected='tutorial'] {
+            left: calc((100% - 77px) / 2);
+            width: 77px;
+        }
+        #highlight-line[data-selected='edit'] {
+            left: calc(100% - (50% + 55px) / 2 + 7px);
+            width: 41px;
+        }
+
+
+        #copyright {
+            position: absolute;
+            left: 50%;
+            bottom: 5px;
+            width: max-content;
+            transform: translate(-50%, 0);
+
+            color: rgb(100, 100, 100);
+
+            font-family: 'Noto Sans', sans-serif;
+
+            user-select: none;
+        }
+        #contact {
+            position: absolute;
+            left: 50%;
+            bottom: calc(10px + 1em);
+            width: max-content;
+            transform: translate(-50%, 0);
+
+            color: rgb(100, 100, 100);
+
+            font-family: 'Noto Sans', sans-serif;
+
+            user-select: none;
+        }
+
+
+
+
+        #right {
+            position: absolute;
+            top: 0;
+            left: 360px;
+            width: calc(100% - 360px);
+            min-width: 50vw;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (width <= 720px) {
+            #right {
+                left: 50vw;
+                width: 50vw;
+            }
+        }
+
+        #gl-canvas {
+            background-color: black;
+
+            border-radius: 15px;
+            width: 35vw;
+        }
+        #overlay, #particles {
+            position: absolute;
+            pointer-events: none;
+
+            border-radius: 15px;
+            width: 35vw;
+        }
+
+        #sim-container {
+            position: relative;
+            
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #button-container {
+            margin-bottom: 15px;
+            padding: 5px 20px;
+
+            border-style: solid;
+            border-radius: 50px;
+            border-width: 2px;
+            border-color: rgb(40, 40, 40);
+
+            cursor: default;
+            user-select: none;
+        }
+
+        .sim-button {
+            vertical-align: top;
+            margin: 5px 10px;
+
+            width: 25px;
+            height: 25px;
+        }
+        #pause {
+            transform: scale(1.5);
+        }
+        #halt {
+            transform: scale(1.2);
+        }
+        .sim-button[data-status='selected'] {
+            filter: brightness(50%);
+        }
+        .sim-button[data-status='none']:hover {
+            cursor: pointer;
+        }
+
+        .separator {
+            margin-top: 5px;
+            width: 1.5px;
+            height: 25px;
+
+            background-color: rgb(40, 40, 40);
+
+            pointer-events: none;
+            display: inline-block;
+        }
+
+        #size-alert-container {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            opacity: 0;
+            transition-property: opacity;
+            transition-duration: 0.1s;
+
+            pointer-events: none;
+
+            z-index: 10;
+
+            background-color: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(3px);
+        }
+        #size-alert {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--light);
+            font-family: "Noto Sans", sans-serif;
+
+            border-radius: 10px;
+
+            width: 80%;
+            height: fit-content;
+            padding: 10px;
+            background-color: rgb(60, 60, 60, 0.8);
+
+            backdrop-filter: blur(10px);
+        }
+        #size-alert * {
+            text-align: center;
+        }
+    </style>
+    <style>
+        @keyframes slide-in {
+            from {
+                opacity: 0;
+                transform: translate(0, 30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+        }
+        @keyframes slide-out {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+
+            70% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(0, 30px);
+            }
+        }
+        @keyframes grow {
+            from {
+                left: 50%;
+                width: 0%;
+            }
+
+            to {
+                left: 2%;
+                width: 96%;
+            }
+        }
+        @keyframes fade {
+            from {
+                left: 2%;
+                width: 96%;
+                opacity: 1;
+            }
+            
+            to {
+                left: 2%;
+                width: 96%;
+                opacity: 0;
+            }
+        }
+
+        #control-container {
+            position: absolute;
+            display: flex;
+            /* flex-direction: column; */
+            justify-content: center;
+
+            top: calc(var(--tab-height) + 30px);
+            width: 100%;
+            height: calc(100% - var(--tab-height) - 30px);
+
+            font-family: 'Noto Sans', sans-serif;
+            color: var(--light);
+
+            overflow: auto;
+        }
+        #about-container, #tutorial-container, #edit-container {
+            position: relative;
+            width: calc(100% - 40px);
+            max-width: 300px;
+            height: calc(100% - 20px);
+
+            anchor-name: --edit-line;
+        }
+        #edit-line {
+            position: fixed;
+            position-anchor: --edit-line;
+
+            left: 20px;
+            width: calc(50vw - 40px);
+            max-width: 320px;
+            height: 2px;
+
+            background-color: rgb(60, 60, 60);
+
+            z-index: 3;
+        }
+        .shadow-line {
+            position: sticky;
+
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 1px;
+            
+            box-shadow: 0 3px 15px 2px rgb(0, 0, 0);
+
+            z-index: 2;
+        }
+        .info {
+            position: relative;
+
+            border-radius: 10px;
+            margin-top: 16px;
+            padding: 14px 20px 12px 20px;
+
+            background-color: rgb(60, 60, 60);
+
+
+            animation: slide-in 0.3s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+        }
+        .info:first-child {
+            margin-top: 20px;
+        }
+        .info-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            border-radius: 10px;
+
+            background-color: rgb(60, 60, 60);
+            opacity: 0;
+
+            transition: opacity;
+            transition-duration: 0.2s;
+
+            pointer-events: none;
+        }
+        .padding {
+            height: 13px;
+        }
+        select, ::picker(select) {
+            appearance: base-select;
+        }
+
+        .title {
+            width: 100%;
+            text-align: center;
+        }
+        #about-container .info p, #tutorial-container .info p {
+            text-indent: 1em;
+        }
+        #about-container .info strong, #tutorial-container .info strong:not(.normal) {
+            background-image: linear-gradient(0.25turn, #d25050 0, var(--light) 130%);
+            color: transparent;
+            background-clip: text;
+        }
+        #about-container .info span, #tutorial-container .info span { /* Undoes styles */
+            font-weight: 400;
+            color: var(--light);
+        }
+        #get-started-button:hover {
+            cursor: pointer;
+        }
+        #get-started, #to-edit {
+            anchor-name: --get-started;
+            text-align: center;
+        }
+        
+        .underline {
+            position-anchor: --get-started;
+
+            animation-duration: 0.2s;
+            animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+            animation-fill-mode: both;
+
+            position: relative;
+            width: 0;
+            height: 2px;
+            background-image: linear-gradient(0.25turn, #d25050 0, var(--light) 130%);
+
+            border-radius: 5px;
+
+            animation-name: fade;
+            opacity: 0;
+        }
+        #get-started-button:hover > .underline, #to-edit-button:hover > .underline {
+            animation-duration: 0.7s;
+            opacity: 1;
+            animation-name: grow;
+        }
+        
+
+        /* Tutorial */
+        #tutorial-container img {
+            position: relative;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: rgb(120, 120, 120);
+            border-width: 2px;
+
+            margin-top: 10px;
+
+            width: 80%;
+            left: 10%;
+
+        }
+        #mini-erase {
+            transform: translate(-26.5px, 4px);
+            left: -100px;
+            width: 1em !important;
+            height: 1em;
+
+            border-style: none !important;
+
+            filter: grayscale(100%) brightness(600%);
+        }
+
+
+
+        #particle-info {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        #particle-button-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        #add-button {
+            position: relative;
+            margin-top: 5px;
+            left: 9px;
+
+            background-color: #5aac41;
+        }
+        #delete-button {
+            position: relative;
+            left: 9px;
+            margin-bottom: 6px;
+            
+            background-color: #d25050;
+            filter: grayscale(100%);
+        }
+
+        #preset {
+            width: 100%;
+            background-color: rgb(60, 60, 60);
+            color: var(--light);
+            font-family: 'Noto Sans', sans-serif;
+            margin: 6px 0 3px 0;
+
+            border-width: 2px;
+            border-color: rgb(var(--light));
+
+            outline: 0 !important;
+
+            cursor: pointer;
+        }
+        #preset option {
+            background-color: rgb(60, 60, 60);
+            font-family: 'Noto Sans', sans-serif;
+            color: var(--light);
+        }
+        #preset option:hover, #preset option:focus {
+            background: rgb(100, 100, 100);
+        }
+        input[type='range'] {
+            position: relative;
+            top: 4px;
+
+            cursor: pointer;
+
+            accent-color: #d25050;
+        }
+
+        .button {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            margin-right: 8px;
+
+            border-radius: 7px;
+            border-style: none;
+
+
+            transition: transform;
+            transition-duration: 0.1s;
+            transition-timing-function: ease-out;
+        }
+        .button:hover:not([data-disabled='true']) {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        .button[data-disabled='true'] {
+            filter: brightness(85%);
+        }
+        .button img {
+            filter: grayscale(100%) brightness(600%);
+
+            width: 40px;
+            height: 40px;
+        }
+        #clear-button {
+            position: absolute;
+            right: 0;
+
+            margin-right: 18px;
+            
+            background-color: #d25050;
+        }
+        #trash-icon, #delete-icon, #add-icon, #erase-icon {
+            transform: scale(0.85);
+            margin: 0;
+        }
+        
+        #undo-button, #redo-button, #erase-button {
+            background-color: rgb(100, 100, 100);
+        }
+        #undo-icon, #redo-icon {
+            transform: translate(0, 2px) scale(0.85);
+        }
+        #undo-button, #redo-button {
+            margin-right: 5px;
+        }
+
+        #erase-button {
+
+            transition: transform, background-color;
+            transition-duration: 0.1s;
+            transition-timing-function: ease-out;
+        }
+        #erase-icon {
+            transform: translate(-1px, 0.5px) scale(0.8);
+        }
+
+        #preset-alert-container {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            opacity: 0;
+            transition-property: opacity;
+            transition-duration: 0.1s;
+
+            pointer-events: none;
+
+            z-index: 10;
+
+            background-color: rgba(10, 10, 10, 0.5);
+        }
+        #preset-alert {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--light);
+            font-family: "Noto Sans", sans-serif;
+
+            border-radius: 10px;
+            
+            width: 210px;
+            height: fit-content;
+            padding: 10px;
+            background-color: rgb(60, 60, 60);
+        }
+        @media (width >= 720px) {
+            #preset-alert {
+                left: 75px;
+            }
+        }
+        @media (width < 720px) {
+            #preset-alert {
+                left: calc(25% - 105px);
+            }
+        }
+        #preset-button-container {
+            width: 100%;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            margin: 10px 0 4px 0;
+        }
+        #preset-button-container .button {
+            height: 35px;
+            margin: 0 14px;
+            width: 70px;
+
+            font-size: 15px;
+            color: var(--light);
+        }
+        #change-button {
+            background-color: #d25050;
+        }
+        #cancel-button {
+            background-color: rgb(100, 100, 100);
+        }
+        #preset-alert * {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='left'>
+        <div id='bottom-line'></div>
+        <div id='tab-control'>
+            <button id='about-button' data-status='selected'>About</button>
+            <button id='tutorial-button' data-status='none'>Tutorial</button>
+            <button id='edit-button' data-status='none'>Edit</button>
+        </div>
+        <div id='about-hint' class='hint'></div>
+        <div id='tutorial-hint' class='hint'></div>
+        <div id='edit-hint' class='hint'></div>
+        <div id='highlight-line' data-selected='about'></div>
+        
+        <div id='control-container'>
+            <div id='edit-line'></div>
+            <div id='about-container'>
+                <div class='shadow-line'></div>
+                <div class='info'>
+                    <h2 class='title'>Psilab</h2>
+                    <div id='description'>
+                        <p>Psilab is an easy to understand and interactive
+                        tool for simulating simple particles on the quantum scale.</p>
+                        <br>
+                        <p>Made for <strong>students <span>and</span> teachers</strong> alike, Psilab
+                        allows you to visualize complex topics simply,
+                        moving inaccessible concepts within reach.</p>
+                    </div>
+                </div>
+                <div class='info'>
+                    <p>With its intuitive design, less has to be explained, allowing
+                    you to explore quantum mechanics immediately.</p>
+                    <br>
+                    <p><strong>Customize <span>and</span> run</strong> your own experiments
+                    by adding particles and barriers.
+                    </p>
+                </div>
+                <div id='get-started-button' class='info' onclick='selectPage("tutorial");'>
+                    <h3 id='get-started'><strong><a>Learn How and Get Started</a></strong></h3>
+                    <div class='underline'></div>
+                </div>
+                <div class='info'></div>
+                <div class='padding'></div>
+            </div>
+            <div id='tutorial-container' style='display: none;'> 
+                <div class='shadow-line'></div>
+                <div class='info'>
+                    <h2 class='title' style='margin-bottom: 2px;'>Tutorial</h2>
+                    <p>On the right is the simulation. To run the simulation,
+                    press the <strong class='normal'>play button</strong>; the <strong class='normal'>pause button</strong> will pause the simulation;
+                    and the rectangular <strong class='normal'>stop button</strong> will reset the simulation.</p>
+
+                    <img src='/Psilab/assets/tutorial/control-menu.png' style='border-radius: 100px;'>
+                </div>
+                <div class='info'>
+                    <p>To select a particle, click on it. The <span style='color: #d25050;'>red outline</span> shows that it
+                    is selected.</p>
+
+                    <img src='/Psilab/assets/tutorial/selecting.png'>
+
+                    <p>Once selected, clicking and dragging the particle will change its position.
+                    Clicking and dragging on the gray circle on the edge of the particle will change
+                    the position and rotation of the particle.</p>
+                    <!-- <p>Alternatively, there are four sliders in the side menu of the
+                    <strong><a href='#' style='color: inherit;' onclick='selectPage("edit");'>Edit</a></strong>
+                    tab which can change these values as well. Below is an example of what they look like.</p>
+
+                    <img src='/Psilabassets/tutorial/sliders.png'> -->
+                </div>
+                <div class='info'>
+                    <p>To draw potential barriers (walls), click and drag on empty space in the simulation.
+                    The thickness of the barriers and how much they reflect the wave packet can be changed
+                    by the <strong class='normal'>Size</strong> and <strong class='normal'>Hardness</strong>
+                    sliders.</p>
+
+                    <img src='/Psilab/assets/tutorial/wall-sliders.png'>
+
+                    <p>Click on the erase <img id='mini-erase' src='/Psilab/assets/erase.svg'> button to toggle
+                    the ability to remove walls.</p>
+                </div>
+                <div id='to-edit-button' class='info' onclick='selectPage("edit");'>
+                    <h3 id='to-edit'><strong><a>Starting Editing Simulation</a></strong></h3>
+                    <div class='underline'></div>
+                </div>
+                <div class='info'></div>
+                <div class='padding'></div>
+            </div>
+            <div id='edit-container' style='display: none;'>
+                <div class='shadow-line'></div>
+                <div id='particle-info' class='info'>
+                    <div>
+                        <h3>Particles</h3>
+                        <p><strong>Selected:</strong> <span id='selected' style='font-weight: 400;'>none</span></p>
+                        <br>
+
+                        <strong>Position</strong>
+                        <p style='margin-bottom: 3px;'>x: <input id='x-coord' type='range' value='0.5' min='0' max='1' step='0.01' disabled></p>
+                        <p>y: <input id='y-coord' type='range' value='0.5' min='0' max='1' step='0.01' disabled></p>
+                        <br>
+
+                        <strong>Angle & Radius</strong>
+                        <p >θ: <input id='angle' type='range' value='0' min='0' max='6.2831' step='0.01' disabled></p>
+                        <p style='margin-bottom: 7px;'>R: <input id='psize' type='range' value='0.082' min='0.04' max='0.2' step='0.001' disabled></p>
+                    </div>
+                    <div id='particle-button-container'>
+                        <button id='add-button' class='button' title='Add particle'>
+                            <img id='add-icon' src='/Psilab/assets/add.svg'>
+                        </button>
+
+                        <button id='delete-button' class='button' title='Delete'>
+                            <img id='delete-icon' src='/Psilab/assets/trash.svg'>
+                        </button>
+                    </div>
+                    <div class='info-overlay'></div>
+                </div>
+
+                <div id='brush-info' class='info'>
+                    <h3>Potential Barriers</h3>
+                    <p>Size: <input id='size' type='range' value='2' min='1' max='10' step='0.5'></p>
+                    <p>Hardness: <input id='hardness' type='range' value='1000' min='0' max='1000'></p>
+                    <br>
+
+                    <button id='undo-button' class='button' title='Undo' data-disabled='true'>
+                        <img id='undo-icon' src='/Psilab/assets/undo.svg'>
+                    </button>
+                    <button id='redo-button' class='button' title='Redo' data-disabled='true'>
+                        <img id='redo-icon' src='/Psilab/assets/redo.svg'>
+                    </button>
+                    <button id='erase-button' class='button' title='Erase'>
+                        <img id='erase-icon' src='/Psilab/assets/erase.svg'>
+                    </button>
+                    <button id='clear-button' class='button' title='Clear all'>
+                        <img id='trash-icon' src='/Psilab/assets/trash.svg'>
+                    </button>
+
+                    <div class='info-overlay'></div>
+                </div>
+
+                <div id='preset-info' class='info'>
+                    <h3>Preset</h3>
+                    <select id='preset' name='preset' value='doubleSlitRight'>
+                        <button>
+                            <selectedcontent></selectedcontent>
+                        </button>
+                        
+                        <option value='blank'>
+                            <span class='option-label'>Blank</span>
+                        </option>
+                        <option value='doubleSlitCenter'>
+                            <span class="option-label">Double Slit — Center</span>
+                        </option>
+                        <option value='doubleSlitLeft'>
+                            <span class="option-label">Double Slit — Left</span>
+                        </option>
+                        <option value='doubleSlitRight' selected="selected">
+                            <span class="option-label">Double Slit — Right</span>
+                        </option>
+                    </select>
+
+                    <div class='info-overlay'></div>
+                </div>
+                <div class='padding'></div>
+            </div>
+        </div>
+    </div>
+    <div id='right'>
+        <div id='button-container'>
+            <img id='play' class='sim-button' src='/Psilab/assets/play-button.svg' data-status='none'>
+            <div class='separator'></div>
+            <img id='pause' class='sim-button' src='/Psilab/assets/pause-button.svg' data-status='selected'>
+            <div class='separator'></div>
+            <img id='halt' class='sim-button' src='/Psilab/assets/halt-button.svg' data-status='selected'>
+        </div>
+        <!-- Visualizes the potential and abstract representation -->
+        <div id='sim-container'>
+            <canvas id='overlay'></canvas>
+            <canvas id='particles'></canvas>
+        </div>
+
+        <div id='contact'>
+            <i>Contact me <a href='mailto:henry.termondt@gmail.com' target='_blank' style='color: rgb(100, 100, 100);'>here</a></i>
+        </div>
+        <div id='copyright'>
+            <i>© Henry Termondt 2025</i>
+        </div>
+        
+    </div>
+
+    <div id='preset-alert-container'>
+        <div id='preset-alert'>
+            <h2>Change preset?</h2>
+            <div>This cannot be undone</div>
+            <div id='preset-button-container'>
+                <button id='change-button' class='button'><strong>Yes</strong></button>
+                <button id='cancel-button' class='button'><strong>Cancel</strong></button>
+            </div>
+        </div>
+    </div>
+    <div id='size-alert-container'>
+        <div id='size-alert'>
+            <h1>Your screen is too small!</h1>
+            <div>Please resize the window or change to a different device.</div>
+        </div>
+    </div>
+    
+
+    <!-- Import a libary for simplifying WebGL -->
+    <script src='/Psilab/compute-shader.js'></script>
+
+    <script src='/Psilab/setup.js'></script>
+    <script src='/Psilab/webgl.js'></script>
+    <script src='/Psilab/particles.js'></script>
+    <script src='/Psilab/ui.js'></script>
+    <script src='/Psilab/mouse.js'></script>
+    <script src='/Psilab/versions.js'></script>
+    <script src='/Psilab/index.js'></script>
+</body>
+</html>
