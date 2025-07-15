@@ -23,13 +23,33 @@ const dataToArr = data => {
 
             const pindex = y * d + x; // Put index
             if (val === 0) {
-                if (alpha == 0) vArr[pindex] = 0;
+                if (alpha == 0 || (presets[curPreset].type === 'solid' && x !== 0 && y !== 1 && x !== d - 1 && y !== d)) vArr[pindex] = 0;
                 else vArr[pindex] = 100000;
-            } else vArr[pindex] = (val - 60) / (225 - 60) * 1000;
-            
+            } else {
+                vArr[pindex] = presets[curPreset].type === 'transparent' ?
+                    (val - 60) / (225 - 60) * 1000 :
+                    val / 255 * 500;
+            }
         }
     }
 };
+// const dataToArr = data => {
+//     const d = Math.sqrt(data.data.length / 4);
+//     for (let y = 1; y <= d; y ++) {
+//         for (let x = 0; x < d; x ++) {
+//             const index = ((d - y) * d + x) * 4;
+//             const val = data.data[index],
+//                 alpha = data.data[index + 3];
+
+//             const pindex = y * d + x; // Put index
+//             if (val === 0) {
+//                 if (alpha == 0) vArr[pindex] = 0;
+//                 else vArr[pindex] = 100000;
+//             } else vArr[pindex] = (val - 60) / (225 - 60) * 1000;
+            
+//         }
+//     }
+// };
 
 // Canvases
 const cgl = new ComputeShaderContext(),

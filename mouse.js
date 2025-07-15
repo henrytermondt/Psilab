@@ -15,7 +15,7 @@ const setMouse = e => {
 
 const lineWidth = document.getElementById('size'),
     hardness = document.getElementById('hardness');
-lineWidth.oninput = e => octx.lineWidth = +lineWidth.value;
+// lineWidth.oninput = e => ;
 octx.lineCap = 'round';
 
 let erasing = false;
@@ -50,6 +50,7 @@ glCanvas.addEventListener('mousemove', e => {
         gy = my * height;
     if (mousedown && !Particle.selected) {
         if (erasing) octx.globalCompositeOperation = 'destination-out';
+        octx.lineWidth = +lineWidth.value * (erasing ? 3 : 1);
 
         const col = 60 + (225 - 60) * hardness.value / 1000;
         octx.strokeStyle = `rgb(${col}, ${col}, ${col})`;

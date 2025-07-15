@@ -54,6 +54,8 @@ redoButton.onclick = redo;
 
 const clearButton = document.getElementById('clear-button');
 clearButton.onclick = () => {
+    if (currentVersion === 0) return;
+
     octx.putImageData(versions[0], 0, 0);
 
     save();
@@ -63,24 +65,49 @@ const presets = {
     blank: {
         img: 'blank.png',
         particles: [],
+        type: 'transparent',
     },
     doubleSlitRight: {
         img: 'double-slit-right.png',
         particles: [
             [0.25, 0.5],
         ],
+        type: 'transparent',
     },
     doubleSlitCenter: {
         img: 'double-slit-center.png',
         particles: [
             [0.25, 0.5],
         ],
+        type: 'transparent',
     },
     doubleSlitLeft: {
         img: 'double-slit-left.png',
         particles: [
             [0.75, 0.5, 0.082, Math.PI],
         ],
+        type: 'transparent',
+    },
+    latticeSquare: {
+        img: 'lattice-square.png',
+        particles: [
+            [0.25, 0.5],
+        ],
+        type: 'solid',
+    },
+    latticeTriangle: {
+        img: 'lattice-triangle.png',
+        particles: [
+            [0.25, 0.5],
+        ],
+        type: 'solid',
+    },
+    latticeRandom: {
+        img: 'lattice-random.png',
+        particles: [
+            [0.25, 0.5],
+        ],
+        type: 'solid',
     },
 };
 

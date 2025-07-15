@@ -14,10 +14,10 @@ const initInfoOverlays = () => {
         el.style.height = dim.height + 'px';
     }
 
-    for (const el of infoOverlay) {
-        el.style.opacity = '0.4';
-        el.style.pointerEvents = 'initial';
-    }
+    // for (const el of infoOverlay) {
+    //     el.style.opacity = '0.4';
+    //     el.style.pointerEvents = 'initial';
+    // }
 };
 
 
@@ -51,6 +51,7 @@ play.onclick = () => {
     pause.dataset.status = 'none';
     halt.dataset.status = 'none';
 
+    initInfoOverlays();
     for (const el of infoOverlay) {
         el.style.opacity = '0.4';
         el.style.pointerEvents = 'initial';

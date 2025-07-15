@@ -476,6 +476,10 @@
             anchor-name: --get-started;
             text-align: center;
         }
+        #to-edit-first {
+            anchor-name: --to-edit;
+            text-align: center;
+        }
         
         .underline {
             position-anchor: --get-started;
@@ -494,7 +498,8 @@
             animation-name: fade;
             opacity: 0;
         }
-        #get-started-button:hover > .underline, #to-edit-button:hover > .underline {
+        #to-edit-button-first > .underline 
+        #get-started-button:hover > .underline, #to-edit-button:hover > .underline, #to-edit-button-first:hover > .underline {
             animation-duration: 0.7s;
             opacity: 1;
             animation-name: grow;
@@ -769,9 +774,19 @@
                     <h2 class='title' style='margin-bottom: 2px;'>Tutorial</h2>
                     <p>On the right is the simulation. To run the simulation,
                     press the <strong class='normal'>play button</strong>; the <strong class='normal'>pause button</strong> will pause the simulation;
-                    and the rectangular <strong class='normal'>stop button</strong> will reset the simulation.</p>
+                    and the rectangular <strong class='normal'>stop button</strong> will reset the simulation.
+                    It can only be edited when the simulation is <strong class='normal'>stopped</strong>.</p>
 
                     <img src='/Psilab/assets/tutorial/control-menu.png' style='border-radius: 100px;'>
+                </div>
+                <div class='info'>
+                    <p>To add particles and edit other properties of the simulation, head to the Edit tab
+                    or press the following button. To learn more about how to edit the simulation, keep
+                    reading here.</p>
+                </div>
+                <div id='to-edit-button-first' class='info' onclick='selectPage("edit");'>
+                    <h3 id='to-edit-first'><strong><a>Starting Editing Simulation</a></strong></h3>
+                    <div class='underline'></div>
                 </div>
                 <div class='info'>
                     <p>To select a particle, click on it. The <span style='color: #d25050;'>red outline</span> shows that it
@@ -792,7 +807,7 @@
                     <p>To draw potential barriers (walls), click and drag on empty space in the simulation.
                     The thickness of the barriers and how much they reflect the wave packet can be changed
                     by the <strong class='normal'>Size</strong> and <strong class='normal'>Hardness</strong>
-                    sliders.</p>
+                    sliders on the Edit tab.</p>
 
                     <img src='/Psilab/assets/tutorial/wall-sliders.png'>
 
@@ -864,18 +879,36 @@
                             <selectedcontent></selectedcontent>
                         </button>
                         
-                        <option value='blank'>
-                            <span class='option-label'>Blank</span>
-                        </option>
-                        <option value='doubleSlitCenter'>
-                            <span class="option-label">Double Slit — Center</span>
-                        </option>
-                        <option value='doubleSlitLeft'>
-                            <span class="option-label">Double Slit — Left</span>
-                        </option>
-                        <option value='doubleSlitRight' selected="selected">
-                            <span class="option-label">Double Slit — Right</span>
-                        </option>
+                        <optgroup label='Misc.'>
+                            <option value='blank'>
+                                <span class='option-label'>Blank</span>
+                            </option>
+                        </optgroup>
+
+                        <optgroup label='Double Slit Experiment'>
+                            <option value='doubleSlitCenter'>
+                                <span class="option-label">Double Slit — Center</span>
+                            </option>
+                            <option value='doubleSlitLeft'>
+                                <span class="option-label">Double Slit — Left</span>
+                            </option>
+                            <option value='doubleSlitRight' selected="selected">
+                                <span class="option-label">Double Slit — Right</span>
+                            </option>
+                        </optgroup>
+                        
+                        <optgroup label='Lattice'>
+                            <option value='latticeSquare'>
+                                <span class="option-label">Square Lattice</span>
+                            </option>
+                            <option value='latticeTriangle'>
+                                <span class="option-label">Triangular Lattice</span>
+                            </option>
+                            <option value='latticeRandom'>
+                                <span class="option-label">Random Lattice</span>
+                            </option>
+                        </optgroup>
+                        
                     </select>
 
                     <div class='info-overlay'></div>
