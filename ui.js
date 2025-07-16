@@ -117,10 +117,7 @@ const selectPage = page => {
             el.style.animationName = 'slide-in';
         }
 
-        if (!infoOverlaysReady) {
-            infoOverlaysReady = true;
-            window.requestAnimationFrame(initInfoOverlays);
-        }
+        window.requestAnimationFrame(initInfoOverlays);
     }, 250);
 
     highlight.dataset.selected = page;
