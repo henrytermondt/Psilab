@@ -351,6 +351,17 @@
                 width: 96%;
             }
         }
+        @keyframes grow-small {
+            from {
+                left: 50%;
+                width: 0%;
+            }
+
+            to {
+                left: 7%;
+                width: 86%;
+            }
+        }
         @keyframes fade {
             from {
                 left: 2%;
@@ -361,6 +372,19 @@
             to {
                 left: 2%;
                 width: 96%;
+                opacity: 0;
+            }
+        }
+        @keyframes fade-small {
+            from {
+                left: 7%;
+                width: 86%;
+                opacity: 1;
+            }
+            
+            to {
+                left: 7%;
+                width: 86%;
                 opacity: 0;
             }
         }
@@ -477,7 +501,9 @@
             anchor-name: --to-edit;
             text-align: center;
         }
-        
+        #get-started-button:hover {
+            cursor: pointer;
+        }
         .underline {
             position-anchor: --get-started;
 
@@ -487,19 +513,27 @@
 
             position: relative;
             width: 0;
-            height: 2px;
+            height: 1.5px;
             background-image: linear-gradient(0.25turn, #d25050 0, var(--light) 130%);
 
             border-radius: 5px;
 
-            animation-name: fade;
+            animation-name: fade-small;
             opacity: 0;
         }
-        #to-edit-button-first > .underline 
-        #get-started-button:hover > .underline, #to-edit-button:hover > .underline, #to-edit-button-first:hover > .underline {
+        #get-started + .underline {
+            animation-name: fade;
+            height: 2px;
+        }
+        #get-started-button:hover > .underline {
             animation-duration: 0.7s;
             opacity: 1;
             animation-name: grow;
+        }
+        #to-edit-button:hover > .underline, #to-edit-button-first:hover > .underline {
+            animation-duration: 0.7s;
+            opacity: 1;
+            animation-name: grow-small;
         }
         
 
@@ -785,7 +819,7 @@
                     reading here.</p>
                 </div>
                 <div id='to-edit-button-first' class='info' onclick='selectPage("edit");'>
-                    <h3 id='to-edit-first'><strong><a>Starting Editing Simulation</a></strong></h3>
+                    <h3 id='to-edit-first'><strong><a>Start Editing Simulation</a></strong></h3>
                     <div class='underline'></div>
                 </div>
                 <div class='info'>
@@ -810,7 +844,7 @@
                     the ability to remove walls.</p>
                 </div>
                 <div id='to-edit-button' class='info' onclick='selectPage("edit");'>
-                    <h3 id='to-edit'><strong><a>Starting Editing Simulation</a></strong></h3>
+                    <h3 id='to-edit'><strong><a>Start Editing Simulation</a></strong></h3>
                     <div class='underline'></div>
                 </div>
                 <div class='info'></div>
