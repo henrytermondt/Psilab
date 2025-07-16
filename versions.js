@@ -122,7 +122,7 @@ const setPreset = name => {
 
     const img = new Image();
     img.onload = () => {
-        octx.drawImage(img, 0, 0);
+        octx.drawImage(img, 0, 0, width, height);
         save();
     }
     img.src = '/Psilab/presets/' + presets[name].img;

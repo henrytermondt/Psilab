@@ -13,11 +13,6 @@ const initInfoOverlays = () => {
         el.style.width = dim.width + 'px';
         el.style.height = dim.height + 'px';
     }
-
-    // for (const el of infoOverlay) {
-    //     el.style.opacity = '0.4';
-    //     el.style.pointerEvents = 'initial';
-    // }
 };
 
 

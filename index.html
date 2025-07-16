@@ -5,9 +5,10 @@
 <html>
 <head>
     <title>Psilab</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300..700&display=swap" rel="stylesheet">
+    <link rel='preconnect' href='https://fonts.googleapis.com'>
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+    <link href='https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300..700&display=swap' rel='stylesheet'>
+    <link rel='icon' type='image/png' href='/Psilab/favicon.ico'/>
     <style>
         * {
             margin: 0;
@@ -58,15 +59,12 @@
         #tab-control button {
             position: absolute;
 
-            font-family: "Noto Sans", sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             font-size: 20px;
             font-weight: 500;
             color: var(--light);
 
             border-style: none;
-            /* border-radius: 50px; */
-            /* border-width: 2px; */
-            /* border-color: rgb(60, 60, 60); */
 
             background-color: transparent;
 
@@ -88,7 +86,6 @@
         }
         #tab-control button:hover {
             filter: brightness(110%);
-            /* transform: translate(-50%, 0) scale(1.05); */
         }
 
 
@@ -301,7 +298,7 @@
             justify-content: center;
 
             color: var(--light);
-            font-family: "Noto Sans", sans-serif;
+            font-family: 'Noto Sans', sans-serif;
 
             border-radius: 10px;
 
@@ -668,6 +665,7 @@
             z-index: 10;
 
             background-color: rgba(10, 10, 10, 0.5);
+            backdrop-filter: blur(3px);
         }
         #preset-alert {
             position: absolute;
@@ -677,7 +675,7 @@
             justify-content: center;
 
             color: var(--light);
-            font-family: "Noto Sans", sans-serif;
+            font-family: 'Noto Sans', sans-serif;
 
             border-radius: 10px;
             
@@ -685,6 +683,8 @@
             height: fit-content;
             padding: 10px;
             background-color: rgb(60, 60, 60);
+
+            box-shadow: 0 5px 5px 2px rgb(27, 27, 27);
         }
         @media (width >= 720px) {
             #preset-alert {
@@ -797,11 +797,6 @@
                     <p>Once selected, clicking and dragging the particle will change its position.
                     Clicking and dragging on the gray circle on the edge of the particle will change
                     the position and rotation of the particle.</p>
-                    <!-- <p>Alternatively, there are four sliders in the side menu of the
-                    <strong><a href='#' style='color: inherit;' onclick='selectPage("edit");'>Edit</a></strong>
-                    tab which can change these values as well. Below is an example of what they look like.</p>
-
-                    <img src='/Psilabassets/tutorial/sliders.png'> -->
                 </div>
                 <div class='info'>
                     <p>To draw potential barriers (walls), click and drag on empty space in the simulation.
@@ -887,25 +882,25 @@
 
                         <optgroup label='Double Slit Experiment'>
                             <option value='doubleSlitCenter'>
-                                <span class="option-label">Double Slit — Center</span>
+                                <span class='option-label'>Double Slit — Center</span>
                             </option>
                             <option value='doubleSlitLeft'>
-                                <span class="option-label">Double Slit — Left</span>
+                                <span class='option-label'>Double Slit — Left</span>
                             </option>
-                            <option value='doubleSlitRight' selected="selected">
-                                <span class="option-label">Double Slit — Right</span>
+                            <option value='doubleSlitRight' selected='selected'>
+                                <span class='option-label'>Double Slit — Right</span>
                             </option>
                         </optgroup>
                         
                         <optgroup label='Lattice'>
                             <option value='latticeSquare'>
-                                <span class="option-label">Square Lattice</span>
+                                <span class='option-label'>Square Lattice</span>
                             </option>
                             <option value='latticeTriangle'>
-                                <span class="option-label">Triangular Lattice</span>
+                                <span class='option-label'>Triangular Lattice</span>
                             </option>
                             <option value='latticeRandom'>
-                                <span class="option-label">Random Lattice</span>
+                                <span class='option-label'>Random Lattice</span>
                             </option>
                         </optgroup>
                         
@@ -925,6 +920,7 @@
             <div class='separator'></div>
             <img id='halt' class='sim-button' src='/Psilab/assets/halt-button.svg' data-status='selected'>
         </div>
+        
         <!-- Visualizes the potential and abstract representation -->
         <div id='sim-container'>
             <canvas id='overlay'></canvas>

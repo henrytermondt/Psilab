@@ -15,7 +15,7 @@ const setMouse = e => {
 
 const lineWidth = document.getElementById('size'),
     hardness = document.getElementById('hardness');
-// lineWidth.oninput = e => ;
+
 octx.lineCap = 'round';
 
 let erasing = false;

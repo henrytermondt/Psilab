@@ -164,10 +164,6 @@ class WavePacket extends Particle {
 
 }
 
-// Particle.arr.push(
-//     new WavePacket(0.25, 0.5, 0.082, 0),
-// );
-
 const addButton = document.getElementById('add-button'),
     deleteButton = document.getElementById('delete-button');
 addButton.onclick = () => {
