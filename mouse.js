@@ -25,10 +25,38 @@ eraseButton.onclick = () => {
     eraseButton.style.backgroundColor = erasing ? '#e37c7c' : 'rgb(100, 100, 100)';
 };
 
+
 // Event listeners
 let pgx, pgy,
     clicked, dragging,
+    out,
     changed; // Did the state change (should a new state be saved?)
+const draw = (gx, gy) => {
+    if (!mousedown || Particle.selected) return;
+
+    if (erasing) octx.globalCompositeOperation = 'destination-out';
+    octx.lineWidth = +lineWidth.value * (erasing ? 3 : 1);
+
+    const col = 60 + (225 - 60) * hardness.value / 1000;
+    octx.strokeStyle = `rgb(${col}, ${col}, ${col})`;
+    octx.beginPath();
+    octx.moveTo(pgx, pgy);
+    octx.lineTo(gx, gy);
+    octx.stroke();
+    octx.closePath();
+
+    if (erasing) octx.globalCompositeOperation = 'source-over';
+
+    changed = true;
+};
+
+
+let umx, umy;
+document.addEventListener('mousemove', e => {
+    umx = (e.clientX - simx) / trueDim;
+    umy = (e.clientY - simy) / trueDim;
+});
+
 glCanvas.addEventListener('mousedown', e => {
     mousedown = true;
     clicked = true;
@@ -48,27 +76,12 @@ glCanvas.addEventListener('mousemove', e => {
 
     const gx = mx * width,
         gy = my * height;
-    if (mousedown && !Particle.selected) {
-        if (erasing) octx.globalCompositeOperation = 'destination-out';
-        octx.lineWidth = +lineWidth.value * (erasing ? 3 : 1);
-
-        const col = 60 + (225 - 60) * hardness.value / 1000;
-        octx.strokeStyle = `rgb(${col}, ${col}, ${col})`;
-        octx.beginPath();
-        octx.moveTo(pgx, pgy);
-        octx.lineTo(gx, gy);
-        octx.stroke();
-        octx.closePath();
-
-        if (erasing) octx.globalCompositeOperation = 'source-over';
-
-        changed = true;
-    }
+    if (!out) draw(gx, gy);
 
     pgx = gx;
     pgy = gy;
 });
-glCanvas.addEventListener('mouseup', e => {
+document.addEventListener('mouseup', e => {
     mousedown = false;
     dragging = false;
 
@@ -76,3 +89,16 @@ glCanvas.addEventListener('mouseup', e => {
 
     setMouse(e);
 });
+
+glCanvas.addEventListener('mouseout', e => {
+    out = true;
+    setMouse(e);
+    draw(mx * width, my * height);
+})
+glCanvas.addEventListener('mouseover', e => {
+    out = false;
+    setMouse(e);
+    
+    pgx = umx * width;
+    pgy = umy * height;
+})

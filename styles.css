@@ -207,9 +207,13 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
+    top: -20px;
 }
 
 #button-container {
+    position: relative;
+
     margin-bottom: 15px;
     padding: 5px 20px;
 
@@ -220,6 +224,8 @@ body {
 
     cursor: default;
     user-select: none;
+
+    top: -20px;
 }
 
 .sim-button {
@@ -537,7 +543,7 @@ select, ::picker(select) {
 
 }
 #mini-erase {
-    transform: translate(-26.5px, 4px);
+    transform: translate(-26.5px, 2px);
     left: -100px;
     width: 1em !important;
     height: 1em;

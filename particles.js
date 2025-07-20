@@ -47,6 +47,8 @@ class Particle {
             particleSliders[2].value = Particle.selected.a;
             particleSliders[3].value = Particle.selected.r;
 
+            angleNum.textContent = Math.round(+particleSliders[2].value * 180 / Math.PI) + '°';
+
             for (const el of particleSliders) el.removeAttribute('disabled');
             deleteButton.style.filter = 'grayscale(0%)';
         } else {
@@ -115,6 +117,8 @@ class WavePacket extends Particle {
         particleSliders[1].value = this.y;
         particleSliders[2].value = this.a;
         particleSliders[3].value = this.r;
+
+        angleNum.textContent = Math.round(+particleSliders[2].value * 180 / Math.PI) + '°';
     }
     display() {
         if (Particle.selected === this) {
@@ -183,8 +187,12 @@ deleteButton.onclick = () => {
     save();
 };
 
-const particleSliders = document.querySelectorAll('#particle-info input');
+const particleSliders = document.querySelectorAll('#particle-info input'),
+    angleNum = document.getElementById('angle-num');
 particleSliders[0].oninput = () => Particle.selected.x = +particleSliders[0].value;
 particleSliders[1].oninput = () => Particle.selected.y = +particleSliders[1].value;
-particleSliders[2].oninput = () => Particle.selected.a = +particleSliders[2].value;
+particleSliders[2].oninput = () => {
+    Particle.selected.a = +particleSliders[2].value;
+    angleNum.textContent = Math.round(+particleSliders[2].value * 180 / Math.PI) + '°';
+}
 particleSliders[3].oninput = () => Particle.selected.r = +particleSliders[3].value;

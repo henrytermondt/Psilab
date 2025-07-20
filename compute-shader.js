@@ -40,6 +40,13 @@ class ComputeShaderInput {
         ComputeShader.gl.bindFramebuffer(ComputeShader.gl.FRAMEBUFFER, this.frameBuffer);
         ComputeShader.gl.framebufferTexture2D(ComputeShader.gl.FRAMEBUFFER, ComputeShader.gl.COLOR_ATTACHMENT0, ComputeShader.gl.TEXTURE_2D, this.texture, 0);
         ComputeShader.gl.viewport(0, 0, width, height);
+
+        // This reveals that there's an error. I don't know why and it doesn't seem to affect anything?
+        // This error also isn't thrown on mobile?
+        // const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        // if (status !== gl.FRAMEBUFFER_COMPLETE) {
+        //     console.error("FBO incomplete on this device:", status);
+        // }
     }
     update(data) {
         ComputeShader.gl.bindTexture(ComputeShader.gl.TEXTURE_2D, this.texture);
@@ -47,6 +54,11 @@ class ComputeShaderInput {
         
         ComputeShader.gl.bindFramebuffer(ComputeShader.gl.FRAMEBUFFER, this.frameBuffer);
         ComputeShader.gl.framebufferTexture2D(ComputeShader.gl.FRAMEBUFFER, ComputeShader.gl.COLOR_ATTACHMENT0, ComputeShader.gl.TEXTURE_2D, this.texture, 0);
+
+        const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        if (status !== gl.FRAMEBUFFER_COMPLETE) {
+            console.error("FBO incomplete on this device:", status);
+        }
     }
     read(result = new Float32Array(this.width * this.height * 4)) {
         ComputeShader.gl.bindFramebuffer(ComputeShader.gl.FRAMEBUFFER, this.frameBuffer);
@@ -132,6 +144,10 @@ class ComputeShader {
         else {
             this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.output.frameBuffer);
             this.gl.framebufferTexture2D(this.gl.FRAMEBUFFER, this.gl.COLOR_ATTACHMENT0, this.gl.TEXTURE_2D, this.output.texture, 0);
+        }
+        const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        if (status !== gl.FRAMEBUFFER_COMPLETE) {
+            console.error("FBO incomplete on this device:", status);
         }
         this.gl.viewport(0, 0, this.width, this.height);
     }

@@ -130,7 +130,7 @@
                         <br>
 
                         <strong>Angle & Radius</strong>
-                        <p >θ: <input id='angle' type='range' value='0' min='0' max='6.2831' step='0.01' disabled></p>
+                        <p>θ: <input id='angle' type='range' value='0' min='0' max='6.2831' step='0.01' disabled> <span id='angle-num'>0°</span></p>
                         <p style='margin-bottom: 7px;'>R: <input id='psize' type='range' value='0.082' min='0.04' max='0.2' step='0.001' disabled></p>
                     </div>
                     <div id='particle-button-container'>
@@ -208,6 +208,7 @@
 
                     <div class='info-overlay'></div>
                 </div>
+                <div class='info'></div>
                 <div class='padding'></div>
             </div>
         </div>
@@ -257,9 +258,9 @@
     <!-- Import a libary for simplifying WebGL -->
     <script src='/Psilab/compute-shader.js'></script>
 
+    <script src='/Psilab/particles.js'></script>
     <script src='/Psilab/setup.js'></script>
     <script src='/Psilab/webgl.js'></script>
-    <script src='/Psilab/particles.js'></script>
     <script src='/Psilab/ui.js'></script>
     <script src='/Psilab/mouse.js'></script>
     <script src='/Psilab/versions.js'></script>

@@ -126,6 +126,8 @@ const setPreset = name => {
         save();
     }
     img.src = '/Psilab/presets/' + presets[name].img;
+
+    Particle.deselect();
 };
 
 const presetEl = document.getElementById('preset');
