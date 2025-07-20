@@ -88,6 +88,14 @@ const presets = {
         ],
         type: 'transparent',
     },
+    singleSlit: {
+        img: 'single-slit.png',
+        particles: [
+            [0.25, 0.5],
+        ],
+        type: 'transparent',
+    },
+
     latticeSquare: {
         img: 'lattice-square.png',
         particles: [

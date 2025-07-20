@@ -26,9 +26,13 @@ const dataToArr = data => {
                 if (alpha == 0 || (presets[curPreset].type === 'solid' && x !== 0 && y !== 1 && x !== d - 1 && y !== d)) vArr[pindex] = 0;
                 else vArr[pindex] = 100000;
             } else {
-                vArr[pindex] = presets[curPreset].type === 'transparent' ?
-                    (val - 60) / (225 - 60) * 1000 :
-                    val / 255 * 1000;
+                if (val === 255) {
+                    vArr[pindex] = 100000;
+                } else {
+                    vArr[pindex] = presets[curPreset].type === 'transparent' ?
+                        (val - 60) / (225 - 60) * 1000 :
+                        val / 255 * 1000;
+                }
             }
         }
     }
