@@ -1,3 +1,4 @@
+// Simulation button elements
 const play = document.getElementById('play'),
     pause = document.getElementById('pause'),
     halt = document.getElementById('halt');
@@ -7,7 +8,7 @@ const buttons = [play, pause, halt];
 
 let infoOverlaysReady = false;
 const infoOverlay = document.getElementsByClassName('info-overlay');
-const initInfoOverlays = () => {
+const initInfoOverlays = () => { // Set the sizes
     for (const el of infoOverlay) {
         const dim = el.parentElement.getBoundingClientRect();
         el.style.width = dim.width + 'px';
@@ -42,25 +43,26 @@ play.onclick = () => {
     }
 
     selected = play;
-    play.dataset.status = 'selected';
-    pause.dataset.status = 'none';
-    halt.dataset.status = 'none';
+    play.dataset.status = 'selected'; // Can't interact with play button
+    pause.dataset.status = 'none'; // Can press pause
+    halt.dataset.status = 'none'; // Can halt simulation
 
+    // Set sizes and gray the edit page out
     initInfoOverlays();
     for (const el of infoOverlay) {
         el.style.opacity = '0.4';
         el.style.pointerEvents = 'initial';
     }
 
-    particles.style.display = 'none';
+    particles.style.display = 'none'; // Hide abstract representation of particles
 };
 pause.onclick = () => {
     paused = true;
     if (selected !== halt) {
         selected = pause;
-        play.dataset.status = 'none';
-        pause.dataset.status = 'selected';
-        halt.dataset.status = 'none';
+        play.dataset.status = 'none'; // Can play
+        pause.dataset.status = 'selected'; // Can't pause
+        halt.dataset.status = 'none'; // Can halt
     }
 };
 halt.onclick = () => {
@@ -68,12 +70,13 @@ halt.onclick = () => {
     halted = true;
 
     selected = halt;
-    play.dataset.status = 'none';
-    pause.dataset.status = 'selected';
-    halt.dataset.status = 'selected';
+    play.dataset.status = 'none'; // Can play
+    pause.dataset.status = 'selected'; // Can't pause
+    halt.dataset.status = 'selected'; // Can't halt
 
-    particles.style.display = 'block';
+    particles.style.display = 'block'; // Show abstract representation of particles
 
+    // Can use edit page now
     for (const el of infoOverlay) {
         el.style.opacity = '0';
         el.style.pointerEvents = 'none';
@@ -85,6 +88,7 @@ halt.onclick = () => {
 
 let tooSmall = window.innerWidth * 0.35 < 200;
 
+// Tabs
 const aboutButton = document.getElementById('about-button'),
     tutorialButton = document.getElementById('tutorial-button'),
     editButton = document.getElementById('edit-button');
@@ -103,13 +107,14 @@ const pageInfo = {
 
 
 let shownContainer = pageContainers.about;
-const selectPage = page => {
+const selectPage = page => { // Change the page
     if (highlight.dataset.selected === page) return;
 
+    // Slide away and fade out the old page
     for (const el of pageInfo[highlight.dataset.selected])
         el.style.animationName = 'slide-out';
 
-    window.setTimeout(() => {
+    window.setTimeout(() => { // Wait and the slide in the new page
         shownContainer.style.display = 'none';
         shownContainer = pageContainers[page];
         shownContainer.style.display = 'block';
@@ -117,7 +122,7 @@ const selectPage = page => {
             el.style.animationName = 'slide-in';
         }
 
-        window.requestAnimationFrame(initInfoOverlays);
+        window.requestAnimationFrame(initInfoOverlays); // Wait for elements to load
     }, 250);
 
     highlight.dataset.selected = page;
@@ -127,6 +132,7 @@ aboutButton.onclick = () => selectPage('about');
 tutorialButton.onclick = () => selectPage('tutorial');
 editButton.onclick = () => selectPage('edit');
 
+// What to do when a tab is hovered over
 const aboutHint = document.getElementById('about-hint'),
     tutorialHint = document.getElementById('tutorial-hint'),
     editHint = document.getElementById('edit-hint');

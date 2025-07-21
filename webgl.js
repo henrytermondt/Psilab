@@ -1,13 +1,34 @@
+/*
+The formula for this scenario is A*x1=b, where b=M*x0, A and M are matrices, and x
+is a column vector. x1 is the value of x at the current time step while x0 is the
+value of x during the previous time step.
+
+A and M are calculated once at the beginning of the simulation based on the initial
+positions of the potential barriers. The value of x is set at the beginning but is
+then calculated each frame by solving for b (since M and x0 are known) and then using
+an interative solver, in this case the element-based Jacobi, method to solve for x1.
+
+This script creates all of the shaders which do the above and defines several functions
+to do each of the steps.
+
+If you understood all of that jargon, nice job! A really good reference for the technique
+I used can be found here, made by Arturo Mena:
+https://artmenlope.github.io/solving-the-2d-schrodinger-equation-using-the-crank-nicolson-method/
+*/
+
 ComputeShader.useContext(cgl);
 
-const inputDim = n - 2;
+const inputDim = n - 2; // How large the shaders are
 
-const vInput = new ComputeShaderInput('v', vArr, n - 2, n - 2, 'LUMINANCE');
+const vInput = new ComputeShaderInput('v', vArr, n - 2, n - 2, 'LUMINANCE'); // Potential
+
+// Uniforms for variables used in the simulation
 const rxUniform = new ComputeShaderUniform('rx', '2fv', [rx.r, rx.i]),
     ryUniform = new ComputeShaderUniform('ry', '2fv', [ry.r, ry.i]),
     cUniform = new ComputeShaderUniform('c', '4fv', [0, 0, 0, 0]),
     clearUniform = new ComputeShaderUniform('clear', '1i', false);
 
+// Matrix inputs
 const AInput = new ComputeShaderInput('A', new Float32Array(inputDim * 5 * inputDim * 4), inputDim * 5, inputDim),
     MInput = new ComputeShaderInput('M', new Float32Array(inputDim * 5 * inputDim * 4), inputDim * 5, inputDim),
     xInput = new ComputeShaderInput('x', new Float32Array(inputDim     * inputDim * 4), inputDim    , inputDim),
@@ -19,7 +40,7 @@ let fillAcs,
     calcbcs,
     jacobics,
     rendercs;
-const loadShaders = () => {
+const loadShaders = () => { // Fetch the shader sources and created the shaders
     return Promise.all([
         fetch('/Psilab/shaders/fill-A.glsl').then(r => r.text()).then(content => {
             fillAcs = new ComputeShader(
@@ -75,7 +96,7 @@ const loadShaders = () => {
     ]);
 };
 
-const initShaders = () => {
+const initShaders = () => { // Moves data into the right place so other parts of the code can access it
     dataToArr(octx.getImageData(0, 0, width, height));
     vInput.update(vArr);
 
@@ -92,7 +113,7 @@ const initShaders = () => {
     ComputeShader.swap(MInput, fillMcs.output);    
 };
 
-const clearx = () => {
+const clearx = () => { // Zeros x
     clearUniform.update(true);
     fillxcs.use();
     fillxcs.initializeInputs();
@@ -127,7 +148,7 @@ const solve = () => {
         ComputeShader.swap(xInput, jacobics.output);
     }
 };
-const display = () => {
+const display = () => { // Draws everything to the canvas
     rendercs.use(true);
     rendercs.initializeInputs();
     rendercs.initializeUniforms();

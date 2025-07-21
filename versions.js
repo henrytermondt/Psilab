@@ -4,27 +4,29 @@ const versions = [], // Potential
     states = []; // Particles
 
 const setVersion = index => {
-    octx.putImageData(versions[index], 0, 0);
+    octx.putImageData(versions[index], 0, 0); // Draw the old version onto the canvas
 
     Particle.deselect();
     Particle.arr.length = 0;
     for (const pstate of states[currentVersion]) {
         Particle.arr.push(new WavePacket(...pstate));
     }
+
 };
-const updateDisabled = () => {
+const updateDisabled = () => { // What to do when no versions to undo to or redo to
     undoButton.dataset.disabled = !currentVersion;
     redoButton.dataset.disabled = currentVersion === versions.length - 1;
 };
+
 const save = () => {
-    const v = octx.getImageData(0, 0, width, height);
+    const v = octx.getImageData(0, 0, width, height); // Get barrier data
 
     // Clear all future versions
     if (currentVersion < versions.length - 1) versions.splice(currentVersion + 1);
     
-    versions.push(v);
-    states.push(Particle.getTotalState());
-    currentVersion = versions.length - 1;
+    versions.push(v); // Save barrier data
+    states.push(Particle.getTotalState()); // Save particle data
+    currentVersion = versions.length - 1; // Update version number
 
     updateDisabled();
 };
@@ -36,7 +38,6 @@ const undo = () => {
 
     updateDisabled();
 };
-
 const redo = () => {
     if (currentVersion >= versions.length - 1) return;
     currentVersion ++;
@@ -61,6 +62,7 @@ clearButton.onclick = () => {
     save();
 };
 
+// Info about each of the presets
 const presets = {
     blank: {
         img: 'blank.png',
@@ -119,8 +121,8 @@ const presets = {
     },
 };
 
-// Presets
-const setPreset = name => {
+
+const setPreset = name => { // Draws the preset onto the canvas, updates particles, and saves
     octx.clearRect(0, 0, width, height);
 
     versions.length = states.length = Particle.arr.length = 0;
@@ -138,6 +140,8 @@ const setPreset = name => {
     Particle.deselect();
 };
 
+
+// When the user attempts to change the preset, show the confirmation message
 const presetEl = document.getElementById('preset');
 presetEl.addEventListener('input', e => {
     togglePresetAlert();
@@ -160,16 +164,16 @@ const togglePresetAlert = () => {
 
 const changeButton = document.getElementById('change-button'),
     cancelButton = document.getElementById('cancel-button');
-changeButton.onclick = () => {
+changeButton.onclick = () => { // Make the changes
     togglePresetAlert();
     
     curPreset = presetEl.value;
     setPreset(presetEl.value);
 };
-cancelButton.onclick = () => {
+cancelButton.onclick = () => { // Don't make changes and reset
     togglePresetAlert();
 
     presetEl.value = curPreset;
 };
 
-setPreset(curPreset);
+setPreset(curPreset); // Set the initial preset

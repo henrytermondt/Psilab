@@ -13,26 +13,13 @@ const setMouse = e => {
     if (my > 1) my = 1;
 };
 
-const lineWidth = document.getElementById('size'),
-    hardness = document.getElementById('hardness');
-
-octx.lineCap = 'round';
-
-let erasing = false;
-const eraseButton = document.getElementById('erase-button');
-eraseButton.onclick = () => {
-    erasing = !erasing;
-    eraseButton.style.backgroundColor = erasing ? '#e37c7c' : 'rgb(100, 100, 100)';
-};
-
-
 // Event listeners
 let pgx, pgy,
     clicked, dragging,
     out,
     changed; // Did the state change (should a new state be saved?)
 const draw = (gx, gy) => {
-    if (!mousedown || Particle.selected) return;
+    if (!mousedown || Particle.selected || !halted) return;
 
     if (erasing) octx.globalCompositeOperation = 'destination-out';
     octx.lineWidth = +lineWidth.value * (erasing ? 3 : 1);
@@ -50,7 +37,7 @@ const draw = (gx, gy) => {
     changed = true;
 };
 
-
+// Universal mouse position relative to the canvas
 let umx, umy;
 document.addEventListener('mousemove', e => {
     umx = (e.clientX - simx) / trueDim;
@@ -64,9 +51,11 @@ glCanvas.addEventListener('mousedown', e => {
     
     setMouse(e);
 
+    // Update past mouse position
     pgx = mx * width;
     pgy = my * height;
 
+    // Check if hovering over a particle
     Particle.select();
 });
 glCanvas.addEventListener('mousemove', e => {
@@ -74,18 +63,21 @@ glCanvas.addEventListener('mousemove', e => {
 
     if (mousedown) dragging = true;
 
+    // Set current mouse position
     const gx = mx * width,
         gy = my * height;
     if (!out) draw(gx, gy);
 
+    // Updated past position
     pgx = gx;
     pgy = gy;
 });
 document.addEventListener('mouseup', e => {
+    // If the user is done and they did something, save it to the version history
+    if (changed && mousedown) save();
+
     mousedown = false;
     dragging = false;
-
-    if (changed) save();
 
     setMouse(e);
 });
@@ -93,12 +85,31 @@ document.addEventListener('mouseup', e => {
 glCanvas.addEventListener('mouseout', e => {
     out = true;
     setMouse(e);
+
+    // Complete the line (don't make it look cut off before the edge of the canvas)
     draw(mx * width, my * height);
 })
 glCanvas.addEventListener('mouseover', e => {
     out = false;
     setMouse(e);
     
+    // When reentering the canvas, set the past mouse position to be the universal one
     pgx = umx * width;
     pgy = umy * height;
 })
+
+
+// Input elements
+const lineWidth = document.getElementById('size'),
+    hardness = document.getElementById('hardness');
+
+
+// Handles style changes when erase element is selected
+let erasing = false;
+const eraseButton = document.getElementById('erase-button');
+eraseButton.onclick = () => {
+    erasing = !erasing;
+    eraseButton.style.backgroundColor = erasing ? '#e37c7c' : 'rgb(100, 100, 100)';
+};
+
+octx.lineCap = 'round';

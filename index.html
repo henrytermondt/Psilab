@@ -23,22 +23,26 @@
     <link rel='icon' type='image/png' href='/Psilab/favicon.ico'/>
     <link rel='stylesheet' href='/Psilab/styles.css'>
 </head>
-
 <body>
     <div id='left'>
+        <!-- Tab bar -->
         <div id='bottom-line'></div>
         <div id='tab-control'>
             <button id='about-button' data-status='selected'>About</button>
             <button id='tutorial-button' data-status='none'>Tutorial</button>
             <button id='edit-button' data-status='none'>Edit</button>
         </div>
+        <!-- Lines that show when hovered or selected -->
         <div id='about-hint' class='hint'></div>
         <div id='tutorial-hint' class='hint'></div>
         <div id='edit-hint' class='hint'></div>
         <div id='highlight-line' data-selected='about'></div>
         
-        <div id='control-container'>
-            <div id='edit-line'></div>
+        <div id='page-container'>
+            <!-- Separates tabs from pages -->
+            <div id='tab-line'></div>
+
+            <!-- About page -->
             <div id='about-container'>
                 <div class='shadow-line'></div>
                 <div class='info'>
@@ -60,13 +64,18 @@
                     by adding particles and barriers.
                     </p>
                 </div>
+
+                <!-- Fancy button that takes user to the tutorial page -->
                 <div id='get-started-button' class='info' onclick='selectPage("tutorial");'>
                     <h3 id='get-started'><strong><a>Learn How and Get Started</a></strong></h3>
                     <div class='underline'></div>
                 </div>
+                
                 <div class='info'></div>
                 <div class='padding'></div>
             </div>
+
+            <!-- Tutorial page -->
             <div id='tutorial-container' style='display: none;'> 
                 <div class='shadow-line'></div>
                 <div class='info'>
@@ -84,10 +93,13 @@
                     or press the following button. To learn more about how to edit the simulation, keep
                     reading here.</p>
                 </div>
+
+                <!-- First fancy button -->
                 <div id='to-edit-button-first' class='info' onclick='selectPage("edit");'>
                     <h3 id='to-edit-first'><strong><a>Start Editing Simulation</a></strong></h3>
                     <div class='underline'></div>
                 </div>
+
                 <div class='info'>
                     <p>To select a particle, click on it. The <span style='color: #d25050;'>red outline</span> shows that it
                     is selected.</p>
@@ -109,15 +121,22 @@
                     <p>Click on the erase <img id='mini-erase' src='/Psilab/assets/erase.svg'> button to toggle
                     the ability to remove walls.</p>
                 </div>
+
+                <!-- Second fancy button -->
                 <div id='to-edit-button' class='info' onclick='selectPage("edit");'>
                     <h3 id='to-edit'><strong><a>Start Editing Simulation</a></strong></h3>
                     <div class='underline'></div>
                 </div>
+
                 <div class='info'></div>
                 <div class='padding'></div>
             </div>
+
+            <!-- Edit page -->
             <div id='edit-container' style='display: none;'>
                 <div class='shadow-line'></div>
+
+                <!-- Particles -->
                 <div id='particle-info' class='info'>
                     <div>
                         <h3>Particles</h3>
@@ -145,6 +164,7 @@
                     <div class='info-overlay'></div>
                 </div>
 
+                <!-- Barriers -->
                 <div id='brush-info' class='info'>
                     <h3>Potential Barriers</h3>
                     <p>Size: <input id='size' type='range' value='2' min='1' max='10' step='0.5'></p>
@@ -167,6 +187,7 @@
                     <div class='info-overlay'></div>
                 </div>
 
+                <!-- Presets -->
                 <div id='preset-info' class='info'>
                     <h3>Preset</h3>
                     <select id='preset' name='preset' value='doubleSlitRight'>
@@ -211,12 +232,15 @@
 
                     <div class='info-overlay'></div>
                 </div>
+
                 <div class='info'></div>
                 <div class='padding'></div>
             </div>
         </div>
     </div>
+
     <div id='right'>
+        <!-- Menu -->
         <div id='button-container'>
             <img id='play' class='sim-button' src='/Psilab/assets/play-button.svg' data-status='none'>
             <div class='separator'></div>
@@ -240,6 +264,7 @@
         
     </div>
 
+    <!-- Alerts -->
     <div id='preset-alert-container'>
         <div id='preset-alert'>
             <h2>Change preset?</h2>

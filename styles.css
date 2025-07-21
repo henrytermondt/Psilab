@@ -1,6 +1,8 @@
 * {
     margin: 0;
 }
+
+/* Defines variables */
 :root {
     --light: rgb(225, 225, 225);
     --tab-height: 53px;
@@ -17,6 +19,7 @@ body {
     background-color: rgb(27, 27, 27);
 }
 
+/* Moves the pages and editor to the left */
 #left {
     position: absolute;
     top: 0;
@@ -37,7 +40,6 @@ body {
     margin: calc(var(--tab-height) - 30px) 25%;
 
     width: calc(50%);
-    
 }
 #tab-control button {
     position: absolute;
@@ -48,16 +50,18 @@ body {
     color: var(--light);
 
     border-style: none;
-
     background-color: transparent;
 
-    transform: translate(-50%, 0);
+    transform: translate(-50%, 0); /* Center */
+
+    /* How the text should change when hovered */
     transition-property: filter, transform font-weight;
     transition-duration: 0.05s;
 }
 #tab-control button:hover {
     cursor: pointer;
 }
+/* Placement */
 #about-button {
     left: 0%;
 }
@@ -67,11 +71,12 @@ body {
 #edit-button {
     left: 100%;
 }
+/* Brighten */
 #tab-control button:hover {
     filter: brightness(110%);
 }
 
-
+/* Positions and sizes the highlights on the tabs that show when hovered */
 .hint {
     position: absolute;
     top: var(--tab-height);
@@ -95,7 +100,6 @@ body {
     width: 41px;
 }
 
-
 #bottom-line {
     position: absolute;
     left: calc((100% - (50% + 55px)) / 2 - 6px);
@@ -105,11 +109,10 @@ body {
     height: 2px;
 
     border-radius: 5px;
-
-    /* transform: translate(-20%, 0); */
-
     background-color: rgb(60, 60, 60);
 }
+
+/* The bright highlight that shows what's selected */
 #highlight-line {
     position: absolute;
     top: var(--tab-height);
@@ -121,6 +124,7 @@ body {
     transition-property: left, width;
     transition-duration: 0.2s;
 }
+/* Where to be positioned based on what page is selected */
 #highlight-line[data-selected='about'] {
     left: calc((100% - (50% + 55px)) / 2 - 6px);
     width: 66px;
@@ -134,6 +138,22 @@ body {
     width: 41px;
 }
 
+
+
+/* Move simulation to the right side */
+#right {
+    position: absolute;
+    top: 0;
+    left: 360px;
+    width: calc(100% - 360px);
+    min-width: 50vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 #copyright {
     position: absolute;
@@ -162,23 +182,7 @@ body {
     user-select: none;
 }
 
-
-
-
-#right {
-    position: absolute;
-    top: 0;
-    left: 360px;
-    width: calc(100% - 360px);
-    min-width: 50vw;
-    height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
+/* The right side will expand if the screen is large enough */
 @media (width <= 720px) {
     #right {
         left: 50vw;
@@ -201,6 +205,10 @@ body {
 }
 
 #sim-container {
+    /*
+    Needs to be relative to make a new stacking context for
+    the absolutely positioned child elements to overlap
+    */
     position: relative;
     
     display: flex;
@@ -212,6 +220,10 @@ body {
 }
 
 #button-container {
+    /*
+    Needs to be relative to make a new stacking context for
+    the absolutely positioned child elements to overlap
+    */
     position: relative;
 
     margin-bottom: 15px;
@@ -235,12 +247,15 @@ body {
     width: 25px;
     height: 25px;
 }
+/* The icons are slightly different sizes normally
+so they get scaled to look better */
 #pause {
     transform: scale(1.5);
 }
 #halt {
     transform: scale(1.2);
 }
+/* Brightness means selected */
 .sim-button[data-status='selected'] {
     filter: brightness(50%);
 }
@@ -248,6 +263,7 @@ body {
     cursor: pointer;
 }
 
+/* The small gray lines separating the buttons */
 .separator {
     margin-top: 5px;
     width: 1.5px;
@@ -304,7 +320,7 @@ body {
 
 
 
-
+/* For .info class */
 @keyframes slide-in {
     from {
         opacity: 0;
@@ -331,6 +347,7 @@ body {
         transform: translate(0, 30px);
     }
 }
+/* For lines underneath fancy buttons */
 @keyframes grow {
     from {
         left: 50%;
@@ -380,10 +397,9 @@ body {
     }
 }
 
-#control-container {
+#page-container {
     position: absolute;
     display: flex;
-    /* flex-direction: column; */
     justify-content: center;
 
     top: calc(var(--tab-height) + 30px);
@@ -401,11 +417,11 @@ body {
     max-width: 300px;
     height: calc(100% - 20px);
 
-    anchor-name: --edit-line;
+    anchor-name: --tab-line;
 }
-#edit-line {
+#tab-line {
     position: fixed;
-    position-anchor: --edit-line;
+    position-anchor: --tab-line;
 
     left: 20px;
     width: calc(50vw - 40px);
@@ -437,11 +453,10 @@ body {
 
     background-color: rgb(60, 60, 60);
 
-
     animation: slide-in 0.3s cubic-bezier(0.165, 0.840, 0.440, 1.000);
 }
 .info:first-child {
-    margin-top: 20px;
+    margin-top: 20px; /* Make a small margin between shadow line and first box */
 }
 .info-overlay {
     position: absolute;
@@ -458,6 +473,7 @@ body {
 
     pointer-events: none;
 }
+/* The little space at the end of a page */
 .padding {
     height: 13px;
 }
@@ -472,18 +488,23 @@ select, ::picker(select) {
 #about-container .info p, #tutorial-container .info p {
     text-indent: 1em;
 }
+/* Makes the text gradient */
 #about-container .info strong, #tutorial-container .info strong:not(.normal) {
     background-image: linear-gradient(0.25turn, #d25050 0, var(--light) 130%);
     color: transparent;
     background-clip: text;
 }
-#about-container .info span, #tutorial-container .info span { /* Undoes styles */
+/* Undoes styles */
+#about-container .info span, #tutorial-container .info span {
     font-weight: 400;
     color: var(--light);
 }
+
 #get-started-button:hover {
     cursor: pointer;
 }
+
+/* Make sure the parts of the button stay together */
 #get-started, #to-edit {
     anchor-name: --get-started;
     text-align: center;
@@ -492,7 +513,7 @@ select, ::picker(select) {
     anchor-name: --to-edit;
     text-align: center;
 }
-#get-started-button:hover {
+#get-started-button:hover, #to-edit-button:hover, #to-edit-button-first:hover {
     cursor: pointer;
 }
 .underline {
@@ -505,17 +526,19 @@ select, ::picker(select) {
     position: relative;
     width: 0;
     height: 1.5px;
-    background-image: linear-gradient(0.25turn, #d25050 0, var(--light) 130%);
+    background-image: linear-gradient(0.25turn, #d25050 0, var(--light) 130%); /* Creates gradient */
 
     border-radius: 5px;
 
     animation-name: fade-small;
     opacity: 0;
 }
+/* Fade in by default */
 #get-started + .underline {
     animation-name: fade;
     height: 2px;
 }
+/* Grow when hovered */
 #get-started-button:hover > .underline {
     animation-duration: 0.7s;
     opacity: 1;
@@ -542,6 +565,7 @@ select, ::picker(select) {
     left: 10%;
 
 }
+/* Mini eraser icon */
 #mini-erase {
     transform: translate(-26.5px, 2px);
     left: -100px;
@@ -551,6 +575,8 @@ select, ::picker(select) {
     border-style: none !important;
 
     filter: grayscale(100%) brightness(600%);
+
+    cursor: text;
 }
 
 
@@ -621,11 +647,11 @@ input[type='range'] {
     border-radius: 7px;
     border-style: none;
 
-
     transition: transform;
     transition-duration: 0.1s;
     transition-timing-function: ease-out;
 }
+/* What to do while no particle is selected */
 .button:hover:not([data-disabled='true']) {
     transform: scale(1.1);
     cursor: pointer;
@@ -634,6 +660,7 @@ input[type='range'] {
     filter: brightness(85%);
 }
 .button img {
+    /* Some icons are dark blue at first but they should be white. This is a hacky fix */
     filter: grayscale(100%) brightness(600%);
 
     width: 40px;
@@ -663,7 +690,6 @@ input[type='range'] {
 }
 
 #erase-button {
-
     transition: transform, background-color;
     transition-duration: 0.1s;
     transition-timing-function: ease-out;
@@ -711,6 +737,7 @@ input[type='range'] {
 
     box-shadow: 0 5px 5px 2px rgb(27, 27, 27);
 }
+/* Preset alert needs to stay centered within the left column */
 @media (width >= 720px) {
     #preset-alert {
         left: 75px;

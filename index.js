@@ -21,7 +21,6 @@ const loop = () => {
 // Loading shaders takes time and is asynchronous, so the simulation must wait to start
 (async () => {
     await loadShaders();
-    // initShaders();
 
     // Begin the simulation
     window.requestAnimationFrame(loop);
